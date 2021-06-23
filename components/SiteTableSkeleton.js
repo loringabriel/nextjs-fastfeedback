@@ -18,7 +18,7 @@ const SkeletonRow = ({ width }) => (
   </Box>
 );
 
-const SiteTableSkeleton = () => {
+function SiteTableSkeleton() {
   return (
     <Table>
       <thead>
@@ -39,6 +39,6 @@ const SiteTableSkeleton = () => {
       </tbody>
     </Table>
   );
-};
+}
 
 export default SiteTableSkeleton;

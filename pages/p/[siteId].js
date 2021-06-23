@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { useRouter } from 'next/router';
-import { Box, FormControl, FormLabel, Input, Button } from '@chakra-ui/react';
+import { Box, FormControl, FormLabel, Input, Button, useToast } from '@chakra-ui/react';
 
 import Feedback from 'components/Feedback';
 import { useAuth } from 'lib/auth';
@@ -37,22 +37,30 @@ const FeedbackPage = ({ initialFeedback }) => {
   const router = useRouter();
   const inputEl = useRef(null);
   const [allFeedback, setAllFeedback] = useState(initialFeedback);
+  const toast = useToast();
 
   const onSubmit = (e) => {
     e.preventDefault();
-
     const newFeedback = {
-      author: auth.user.name,
+      author: auth.user.displayName,
       authorId: auth.user.uid,
       siteId: router.query.siteId,
       text: inputEl.current.value,
       createdAt: new Date().toISOString(),
-      provider: auth.user.provider,
+      provider: auth.user.providerData[0].providerId,
       status: 'pending'
     };
 
     setAllFeedback([newFeedback, ...allFeedback]);
     createFeedback(newFeedback);
+    inputEl.current.value = '';
+    toast({
+        title: 'Success!',
+        description: "Comment added with success.",
+        status: 'success',
+        duration: 5000,
+        isClosable: true
+      });
   };
 
   return (
